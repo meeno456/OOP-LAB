@@ -192,3 +192,93 @@ cout << "Student " << student->getName() << " is not enrolled in course " << cou
 << endl;
 }
 }
+void Course::viewStudents() const {
+cout << "Students enrolled in course " << courseCode << ":" << endl;
+for (const auto& student : studentsEnrolled) {
+cout << student->getStudentID() << " - " << student->getName() << endl;
+}
+}
+void Course::saveToFile() const {
+ofstream outFile(courseCode + "_course.txt");
+if (outFile.is_open()) {
+outFile << "Course Code: " << courseCode << endl;
+outFile << "Course Name: " << courseName << endl;
+outFile << "Max Capacity: " << maxCapacity << endl;
+outFile << "Students Enrolled:" << endl;
+for (const auto& student : studentsEnrolled) {
+outFile << student->getStudentID() << " - " << student->getName() << endl;
+}
+outFile.close();
+cout << "Course data saved to file." << endl;
+}
+else {
+cout << "Unable to save course data to file." << endl;
+}
+}
+void Course::loadFromFile() {
+ifstream inFile(courseCode + "_course.txt");
+if (inFile.is_open()) {
+string line;
+while (getline(inFile, line)) {
+stringstream ss(line);
+string key, value;
+ss >> key >> value;
+if (key == "Course" && value == "Code:") {
+ss >> courseCode;
+}
+else if (key == "Course" && value == "Name:") {
+getline(ss, courseName);
+courseName = courseName.substr(1);
+}
+else if (key == "Max" && value == "Capacity:") {
+ss >> maxCapacity;
+}
+else if (key == "Students" && value == "Enrolled:") {
+while (getline(inFile, line)) {
+stringstream student_ss(line);
+int studentID;
+string studentName;
+student_ss >> studentID;
+getline(student_ss, studentName);
+studentName = studentName.substr(1);
+Student* student = new Student(studentID, studentName, "");
+studentsEnrolled.push_back(student);
+}
+}
+}
+inFile.close();
+cout << "Course data loaded from file." << endl;
+}
+else {
+cout << "Unable to load course data from file." << endl;
+}
+}
+// Teacher methods
+void Teacher::assignCourse(Course* course) {
+coursesTaught.push_back(course);
+cout << "Course " << course->getCourseCode() << " assigned to teacher " << name << "." << endl;
+}
+void Teacher::removeCourse(Course* course) {
+auto it = find(coursesTaught.begin(), coursesTaught.end(), course);
+if (it != coursesTaught.end()) {
+coursesTaught.erase(it);
+cout << "Course " << course->getCourseCode() << " removed from teacher " << name << "." <<
+endl;
+}
+else {
+cout << "Course " << course->getCourseCode() << " is not assigned to teacher " << name << "."
+<< endl;
+}
+}
+void Teacher::viewCourses() const {
+cout << "Courses taught by teacher " << name << ":" << endl;
+for (const auto& course : coursesTaught) {
+cout << course->getCourseCode() << " - " << course->getCourseName() << endl;
+}
+}
+void Teacher::saveToFile() const {
+ofstream outFile(to_string(teacherID) + "_teacher.txt");
+if (outFile.is_open()) {
+outFile << "Teacher ID: " << teacherID << endl;
+outFile << "Name: " << name << endl;
+outFile << "Email: " << email << endl;
