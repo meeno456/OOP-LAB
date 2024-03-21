@@ -282,3 +282,95 @@ if (outFile.is_open()) {
 outFile << "Teacher ID: " << teacherID << endl;
 outFile << "Name: " << name << endl;
 outFile << "Email: " << email << endl;
+outFile << "Courses Taught:" << endl;
+for (const auto& course : coursesTaught) {
+outFile << course->getCourseCode() << " - " << course->getCourseName() << endl;
+}
+outFile.close();
+cout << "Teacher data saved to file." << endl;
+}
+else {
+cout << "Unable to save teacher data to file." << endl;
+}
+}
+void Teacher::loadFromFile() {
+ifstream inFile(to_string(teacherID) + "_teacher.txt");
+if (inFile.is_open()) {
+string line;
+while (getline(inFile, line)) {
+stringstream ss(line);
+string key, value;
+ss >> key >> value;
+if (key == "Teacher" && value == "ID:") {
+ss >> teacherID;
+}
+else if (key == "Name:") {
+getline(ss, name);
+name = name.substr(1);
+}
+else if (key == "Email:") {
+ss >> email;
+}
+else if (key == "Courses" && value == "Taught:") {
+while (getline(inFile, line)) {
+stringstream course_ss(line);
+string courseCode, courseName;
+course_ss >> courseCode >> courseName;
+Course* course = new Course(courseCode, courseName, 0); // Capacity not known from
+file
+coursesTaught.push_back(course);
+}
+}
+}
+inFile.close();
+cout << "Teacher data loaded from file." << endl;
+}
+else {
+cout << "Unable to load teacher data from file." << endl;
+}
+}
+int main() {
+vector<Student> students;
+vector<Course> courses;
+vector<Teacher> teachers;
+char choice;
+do {
+cout << "\nChoose an option:\n";
+cout << "1. Add Student\n";
+cout << "2. Add Course\n";
+cout << "3. Add Teacher\n";
+cout << "4. Display Info\n";
+cout << "5. Exit\n";
+cout << "Enter choice: ";
+cin >> choice;
+switch (choice) {
+case '1': {
+string name, email;
+cout << "\nEnter student name: ";
+cin >> name;
+cout << "Enter student email: ";
+cin >> email;
+students.push_back(Student(studentCounter++, name, email));
+break;
+}
+case '2': {
+string code, name;
+int capacity;
+cout << "\nEnter course code: ";
+cin >> code;
+cout << "Enter course name: ";
+cin >> name;
+cout << "Enter max capacity: ";
+cin >> capacity;
+courses.push_back(Course(code, name, capacity));
+break;
+}
+case '3': {
+string name, email;
+cout << "\nEnter teacher name: ";
+cin >> name;
+cout << "Enter teacher email: ";
+cin >> email;
+teachers.push_back(Teacher(teachers.size() + 1, name, email));
+break;
+}
