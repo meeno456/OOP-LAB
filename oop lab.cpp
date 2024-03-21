@@ -1,22 +1,30 @@
 #include <iostream>
-#include <vector>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <list>
 #include <algorithm>
 
 using namespace std;
 
-#include"course.h"
+class Course; 
 
-class Student {
-private:
-    int studentID;
+class Person {
+protected:
     string name;
-    vector<Course*> coursesEnrolled;
+    string email;
 
 public:
-    Student(int id, string n) : studentID(id), name(n) {}
+    Person(string n, string e) : name(n), email(e) {}
+};
+
+class Student : public Person {
+private:
+    int studentID;
+    list<Course*> coursesEnrolled;
+
+public:
+    Student(int id, string n, string e) : Person(n, e), studentID(id) {}
 
     void enrollCourse(Course* course);
     void dropCourse(Course* course);
@@ -25,14 +33,14 @@ public:
     void saveToFile(const string& filename) {
         ofstream file(filename);
         if (file.is_open()) {
-            file << studentID << "," << name << ",";
+            file << studentID << "," << name << "," << email << ",";
             for (const Course* course : coursesEnrolled) {
                 file << course->getCourseName() << ",";
             }
             file.close();
-            cout << "Data of student is saved to " << filename << endl;
+            cout << "Student data saved to " << filename << endl;
         }
         else {
-            cout << "There is an error,not able to open file for writing." << endl;
+            cout << "Error: Unable to open file for writing." << endl;
         }
     }
