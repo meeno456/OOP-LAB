@@ -40,6 +40,35 @@ public:
             file.close();
             cout << "Student data saved to " << filename << endl;
         }
+            void loadFromFile(const string& filename, list<Course*>& allCourses) {
+        ifstream file(filename);
+        if (file.is_open()) {
+            string line;
+            if (getline(file, line)) {
+                stringstream ss(line);
+                string token;
+                getline(ss, token, ',');
+                studentID = stoi(token);
+                getline(ss, name, ',');
+                getline(ss, email, ',');
+                coursesEnrolled.clear();
+                while (getline(ss, token, ',')) {
+                    for (Course* course : allCourses) {
+                        if (course->getCourseName() == token) {
+                            coursesEnrolled.push_back(course);
+                            break;
+                        }
+                    }
+                }
+                cout << "Student data loaded from " << filename << endl;
+            }
+            file.close();
+        }
+        else {
+            cout << "Error: Unable to open file for reading." << endl;
+        }
+    }
+};
         else {
             cout << "Error: Unable to open file for writing." << endl;
         }
