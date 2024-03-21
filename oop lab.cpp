@@ -374,3 +374,88 @@ cin >> email;
 teachers.push_back(Teacher(teachers.size() + 1, name, email));
 break;
 }
+case '4':
+// Displaying Information
+cout << "\nStudent Information:\n";
+for (const auto& student : students) {
+cout << "Student ID: " << student.getStudentID() << endl;
+cout << "Name: " << student.getName() << endl;
+cout << "Email: " << student.getEmail() << endl;
+student.viewCourses();
+cout << endl;
+}
+// Display course information
+cout << "\nCourse Information:\n";
+for (const auto& course : courses) {
+cout << "Course Code: " << course.getCourseCode() << endl;
+cout << "Course Name: " << course.getCourseName() << endl;
+course.viewStudents();
+cout << endl;
+}
+// Display teacher information
+cout << "\nTeacher Information:\n";
+for (const auto& teacher : teachers) {
+cout << "Teacher ID: " << teacher.getTeacherID() << endl;
+cout << "Name: " << teacher.getName() << endl;
+cout << "Email: " << teacher.getEmail() << endl;
+teacher.viewCourses();
+cout << endl;
+}
+break;
+case '5':
+cout << "Exiting the program.\n";
+return 0; // Exit the program
+default:
+cout << "Invalid choice. Please enter again.\n";
+break;
+}
+} while (true);
+// Save data to files
+for (auto& student : students) {
+student.saveToFile();
+}
+for (auto& course : courses) {
+course.saveToFile();
+}
+for (auto& teacher : teachers) {
+teacher.saveToFile();
+}
+cout << "Data saved to files." << endl;
+// Load data from files
+for (auto& student : students) {
+student.loadFromFile();
+}
+for (auto& course : courses) {
+course.loadFromFile();
+}
+for (auto& teacher : teachers) {
+teacher.loadFromFile();
+}
+cout << "Data loaded from files." << endl;
+// Display student information
+cout << "\nStudent Information:\n";
+for (const auto& student : students) {
+cout << "Student ID: " << student.getStudentID() << endl;
+cout << "Name: " << student.getName() << endl;
+cout << "Email: " << student.getEmail() << endl;
+student.viewCourses();
+cout << endl;
+}
+// Display course information
+cout << "\nCourse Information:\n";
+for (const auto& course : courses) {
+cout << "Course Code: " << course.getCourseCode() << endl;
+cout << "Course Name: " << course.getCourseName() << endl;
+course.viewStudents();
+cout << endl;
+}
+// Display teacher information
+cout << "\nTeacher Information:\n";
+for (const auto& teacher : teachers) {
+cout << "Teacher ID: " << teacher.getTeacherID() << endl;
+cout << "Name: " << teacher.getName() << endl;
+cout << "Email: " << teacher.getEmail() << endl;
+teacher.viewCourses();
+cout << endl;
+}
+return 0;
